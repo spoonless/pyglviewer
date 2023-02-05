@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "pyglviewer"
+version = "0.1.0"
+description = ""
+authors = ["David Gayerie <david@gayerie.dev>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pyglet = "^2.0.4"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^0.991"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+viewer = "pyglviewer.viewer:start"
