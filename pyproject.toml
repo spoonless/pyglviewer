@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.8"
 pyglet = "^2.0.4"
+imgui = {extras = ["pyglet"], version = "^1.4.1"}
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^0.991"

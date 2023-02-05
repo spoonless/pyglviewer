@@ -4,6 +4,8 @@
 import pyglet
 import argparse
 from pyglet.graphics.shader import Shader, ShaderProgram
+import imgui
+import imgui.integrations.pyglet
 
 
 VEXTEX_SHADER = """
@@ -83,7 +85,6 @@ class FragmentShaderGroup(pyglet.graphics.Group):
             window.event(self.on_resize)
 
         if 'mouse' in self.shader_program.uniforms:
-            window.set_exclusive_mouse(True)
             window.event(self.on_mouse_motion)
 
 
@@ -93,6 +94,37 @@ def parse_args() -> argparse.Namespace:
     arg_parser.add_argument("-frag", "--fragmentShader", type=argparse.FileType('r'), dest="fragment_shader", help="Fragment shader file.")
     return arg_parser.parse_args()
 
+
+def update():
+    imgui.new_frame()
+    if imgui.begin_main_menu_bar():
+        if imgui.begin_menu("File", True):
+            clicked_quit, selected_quit = imgui.menu_item("Quit", 'Ctrl+Q', False, True)
+
+            if clicked_quit:
+                exit(1)
+
+            imgui.end_menu()
+        imgui.end_main_menu_bar()
+
+
+    imgui.begin("Custom window", True)
+    imgui.text("Bar")
+    imgui.text_colored("Eggs", 0.2, 1., 0.)
+
+    imgui.text_ansi("B\033[31marA\033[mnsi ")
+    imgui.text_ansi_colored("Eg\033[31mgAn\033[msi ", 0.2, 1., 0.)
+
+    imgui.end()
+
+    imgui.begin("Another Custom window", True)
+    imgui.text("Bar")
+    imgui.text_colored("Eggs", 0.2, 1., 0.)
+
+    imgui.text_ansi("B\033[31marA\033[mnsi ")
+    imgui.text_ansi_colored("Eg\033[31mgAn\033[msi ", 0.2, 1., 0.)
+
+    imgui.end()
 
 def start():
     args = parse_args()
@@ -111,10 +143,16 @@ def start():
 
     @window.event
     def on_draw():
+        update()
         window.clear()
         batch.draw()
+        imgui.render()
+        renderer.render(imgui.get_draw_data())
 
+    imgui.create_context()
+    renderer = imgui.integrations.pyglet.create_renderer(window)
     pyglet.app.run()
+    renderer.shutdown()
 
 
 if __name__ == "__main__":
