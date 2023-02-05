@@ -26,12 +26,17 @@ in vec2 surfacePosition;
 out vec4 color;
 
 uniform float time;
+uniform vec2 resolution;
+uniform vec2 mouse;
 
 const float color_intensity = .5;
 const float Pi = 3.14159;
 
 void main() {
-    vec2 p = (1.32 * surfacePosition);
+    float zoom = mouse.y * 3 + 2.3;
+    mat2 rotScaleMat = zoom * mat2(cos(mouse.x), -sin(mouse.x), sin(mouse.x), cos(mouse.x));
+    vec2 p = surfacePosition * vec2(1, resolution.y / resolution.x) * rotScaleMat;
+
     for(int i = 1; i < 5; i++) {
         vec2 newp = p;
         newp.x += .912 / float(i) * sin(float(i) * Pi * p.y + time * 0.15) + 0.91;
